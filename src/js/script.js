@@ -46,7 +46,8 @@
           id: book.id,
           name: book.name,
           image: book.image,
-          rating: book.rating
+          rating: book.rating,
+          price: book.price
         });
 
         const elem = utils.createDOMFromHTML(generateHTML);
