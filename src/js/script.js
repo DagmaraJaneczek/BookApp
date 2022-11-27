@@ -24,11 +24,14 @@
       thisBooks.initData();
       thisBooks.getElements();
       thisBooks.render();
+      thisBooks.initActions();
     }
 
     initData(){
       const thisBooks = this;
       thisBooks.data = dataSource.books;
+      thisBooks.favoriteBooks = [];
+      thisBooks.filters = [];
     }
 
     getElements(){
@@ -55,8 +58,64 @@
         bookContainer.appendChild(elem);
       }
     }
-  }
 
+    initActions(){
+      const thisBooks = this;
+
+      thisBooks.bookContainer.addEventListener('dblclick', function(event){
+        event.preventDefault();
+
+        const image = event.target.offsetParent;
+        const bookId = image.getAttribute('data-id');
+
+        if(!thisBooks.favoriteBooks.includes(bookId)) {
+          image.classList.add('favorite');
+          thisBooks.favoriteBooks.push(bookId);
+        } else {
+          const indexOfBooks = thisBooks.favoriteBooks.indexOf(bookId);
+          thisBooks.favoriteBooks.splice(indexOfBooks, 1);
+          image.classList.remove('favorite');
+        }
+      });
+
+      const bookFilter = document.querySelector(select.containerOf.filters);
+
+      bookFilter.addEventListener('click', function(cb) {
+        const clickedElement = cb.target;
+
+        if(clickedElement.tagName == 'INPUT' && clickedElement.type == 'checkbox' && clickedElement.name == 'filter') {
+          if (clickedElement.checked) {
+            thisBooks.filters.push(clickedElement.value);
+          } else{
+            const indexOfValue = thisBooks.filters.indexOf(clickedElement.value);
+            thisBooks.filters.splice(indexOfValue, 1);
+          }
+        }
+        thisBooks.filterBooks();
+      });
+    }
+
+    filterBooks() {
+      const thisBooks = this;
+      for(let book of thisBooks.data) {
+        let shouldBeHidden = false;
+        const hiddenBooks = document.querySelector(select.containerOf.images + '[data-id = "' + book.id + '"]');
+        for(const filter of thisBooks.filters) {
+          if(!book.details[filter]) {
+            shouldBeHidden = true;
+            break;
+          }
+        }
+        if (shouldBeHidden){
+          hiddenBooks.classList.add('hidden');
+        } else{
+          hiddenBooks.classList.remove('hidden');
+        }
+      }
+
+    }
+
+  }
   new Books();
 }
 
