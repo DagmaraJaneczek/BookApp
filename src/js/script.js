@@ -25,6 +25,7 @@
       thisBooks.getElements();
       thisBooks.render();
       thisBooks.initActions();
+      thisBooks.determineRatingBgc();
     }
 
     initData(){
@@ -44,6 +45,11 @@
       const thisBooks = this;
 
       for(let book of thisBooks.data) {
+        const ratingBgc = thisBooks.determineRatingBgc(book.rating);
+        book.ratingBgc = ratingBgc;
+
+        const ratingWidth = book.ratingBgc * 10;
+        book.ratingWidth = ratingWidth;
 
         const generateHTML = templates.bookTemplate ({
           id: book.id,
@@ -112,7 +118,22 @@
           hiddenBooks.classList.remove('hidden');
         }
       }
+    }
 
+    determineRatingBgc(rating) {
+
+      let background = '';
+
+      if (rating < 6) {
+        background = 'linear-gradient(to bottom,  #fefcea 0%, #f1da36 100%)';
+      } else if (rating > 6 && rating <= 8){
+        background = 'linear-gradient(to bottom, #b4df5b 0%,#b4df5b 100%)';
+      }else if (rating > 8 && rating <= 9) {
+        background ='linear-gradient(to bottom, #299a0b 0%, #299a0b 100%)';
+      }else if (rating > 9) {
+        background = 'linear-gradient(to bottom, #ff0084 0%,#ff0084 100%)';
+      }
+      return background;
     }
 
   }
