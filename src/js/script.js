@@ -48,7 +48,7 @@
         const ratingBgc = thisBooks.determineRatingBgc(book.rating);
         book.ratingBgc = ratingBgc;
 
-        const ratingWidth = book.ratingBgc * 10;
+        const ratingWidth = book.rating * 10;
         book.ratingWidth = ratingWidth;
 
         const generateHTML = templates.bookTemplate ({
@@ -56,7 +56,9 @@
           name: book.name,
           image: book.image,
           rating: book.rating,
-          price: book.price
+          price: book.price,
+          ratingBgc: book.ratingBgc,
+          ratingWidth: book.ratingWidth
         });
 
         const elem = utils.createDOMFromHTML(generateHTML);
